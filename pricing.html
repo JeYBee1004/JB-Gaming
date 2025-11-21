@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - ❌⭕❌❌ Gaming</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tektur&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<style>
+/* ⚠️ ONLY THIS SMALL ADDITION ADDED TO SUPPORT TABLES */
+.pricing-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.pricing-table th, .pricing-table td {
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  padding: 12px;
+  text-align: center;
+  color: #fff;
+}
+
+.pricing-table th {
+  background-color: rgba(255, 0, 0, 0.2);
+  font-size: 1.2em;
+}
+
+.pricing-table tr:hover {
+  background-color: rgba(255, 0, 0, 0.1);
+  transition: 0.3s;
+}
+
+/* Everything else remains EXACTLY as you provided */
+</style>
+
+<body>
+    <div id="sidebar" class="sidebar">
+        <button class="close-btn" onclick="toggleSidebar()">&times;</button>
+        <header class="sidebar-header">❌⭕❌❌</header>
+        <nav>
+            <a href="index.html" class="active">Home</a>
+            <a href="pricing.html">Pricing</a>
+            <a href="calendar.html">Calendar</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </div>
+
+    <button class="menu-btn" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
+
+    <main class="main-content">
+        <header class="page-header">❌⭕❌❌</header>
+
+        <div class="container">
+            <h1 class="page-title">Pricing</h1>
+
+            <!-- 🔥 NEW PRICING SECTION STARTS HERE -->
+            <section>
+                <h2>Rental Rates (Per Console)</h2>
+
+                <h3 class="pricing-subtitle">Daily Rates</h3>
+                <table class="pricing-table">
+                    <tr>
+                        <th>Console</th>
+                        <th>4 Hours</th>
+                        <th>8 Hours</th>
+                        <th>24 Hours</th>
+                    </tr>
+                    <tr>
+                        <td>PSVITA</td>
+                        <td>Ksh 300</td>
+                        <td>Ksh 500</td>
+                        <td>Ksh 800</td>
+                    </tr>
+                    <tr>
+                        <td>NINTENDO DS Lite</td>
+                        <td>Ksh 200</td>
+                        <td>Ksh 350</td>
+                        <td>Ksh 600</td>
+                    </tr>
+                </table>
+
+                <br><br>
+
+                <h3 class="pricing-subtitle">Weekly & Weekend Packages</h3>
+                <table class="pricing-table">
+                    <tr>
+                        <th>Package</th>
+                        <th>PSVITA</th>
+                        <th>DS Lite</th>
+                    </tr>
+                    <tr>
+                        <td>Weekend (Fri–Sun)</td>
+                        <td>Ksh 1,500</td>
+                        <td>Ksh 1,000</td>
+                    </tr>
+                    <tr>
+                        <td>Weekly (7 Days)</td>
+                        <td>Ksh 4,000</td>
+                        <td>Ksh 3,000</td>
+                    </tr>
+                </table>
+
+                <br><br>
+
+                <h3 class="pricing-subtitle">Available Time Options</h3>
+                <p class="pricing-detail">2 Hours, 4 Hours, 8 Hours, 24 Hours, Weekend Package, Weekly Rental</p>
+            </section>
+
+            <!-- 🔥 SECURITY SECTION -->
+            <section>
+                <h2>Security / Deposit Requirements</h2>
+
+                <div class="terms-grid">
+                    <div class="term-item">
+                        <h3><i class="fas fa-shield-alt"></i> Cash Deposit</h3>
+                        <p>PSVITA: <b>Ksh 2,000</b> deposit<br>DS Lite: <b>Ksh 1,500</b> deposit</p>
+                    </div>
+
+                    <div class="term-item">
+                        <h3><i class="fas fa-id-card"></i> ID Verification</h3>
+                        <p>Client provides:<br>• National ID copy<br>• Selfie while holding the ID</p>
+                    </div>
+
+                    <div class="term-item">
+                        <h3><i class="fas fa-home"></i> Home Delivery Only</h3>
+                        <p>To reduce theft risk, rentals may be delivered only to valid home addresses.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 🔥 FULL TERMS & CONDITIONS SECTION -->
+            <section>
+                <h2>Terms & Conditions</h2>
+
+                <div class="terms-grid">
+
+                    <div class="term-item">
+                        <h3><i class="fas fa-money-bill"></i> Payment</h3>
+                        <p>Full rental amount + deposit must be paid before receiving the console.</p>
+                    </div>
+
+                    <div class="term-item">
+                        <h3><i class="fas fa-tools"></i> Damage Responsibility</h3>
+                        <p>Customer covers loss or physical damage. Wear & tear is not charged.</p>
+                    </div>
+
+                    <div class="term-item">
+                        <h3><i class="fas fa-clock"></i> Late Returns</h3>
+                        <p>Late returns charged <b>Ksh 100 per hour</b>.</p>
+                    </div>
+
+                    <div class="term-item">
+                        <h3><i class="fas fa-gamepad"></i> Games Policy</h3>
+                        <p>Games provided are fixed unless customer requests extra options.</p>
+                    </div>
+
+                    <div class="term-item">
+                        <h3><i class="fas fa-ban"></i> Restrictions</h3>
+                        <p>No system modification allowed. No sub-renting to others.</p>
+                    </div>
+
+                    <div class="term-item">
+                        <h3><i class="fas fa-battery-three-quarters"></i> Battery Notice</h3>
+                        <p>Battery lasts 3–6 hours depending on game usage.</p>
+                    </div>
+
+                    <div class="term-item">
+                        <h3><i class="fas fa-plug"></i> Accessories</h3>
+                        <p>Lost charger, memory card, or game must be replaced by the customer.</p>
+                    </div>
+
+                    <div class="term-item">
+                        <h3><i class="fas fa-sync-alt"></i> Refunds</h3>
+                        <p>If console fails due to hardware (not client damage), remaining hours refunded.</p>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 All Rights Reserved</p>
+        </footer>
+    </main>
+
+<script src="script.js"></script>
+</body>
+</html>

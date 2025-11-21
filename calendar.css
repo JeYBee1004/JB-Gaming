@@ -1,0 +1,105 @@
+
+    /* ---------- Reset & Base ---------- */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: "Tektur", sans-serif; background:#000; color:#fff; min-height:100vh; -webkit-font-smoothing:antialiased; }
+    a { color:inherit; }
+
+    /* ---------- Sidebar ---------- */
+    .sidebar { position:fixed; left:-300px; top:0; width:300px; height:100vh; background:#000; border-right:2px solid rgba(255,255,255,0.08); transition:left .3s ease; z-index:1000; overflow:auto; padding-bottom:60px; }
+    .sidebar.active { left:0; }
+    .sidebar-header { font-size:2em; padding:30px 20px; text-align:center; color:#fff; border-bottom:2px solid rgba(255,255,255,0.08); }
+    .close-btn { position:absolute; top:20px; right:20px; background:none; border:none; color:#fff; font-size:2em; cursor:pointer; }
+    .close-btn:hover { color:#f00; }
+    .sidebar nav { padding:20px 0; }
+    .sidebar nav a { display:block; padding:15px 30px; color:#ccc; text-decoration:none; border-left:3px solid transparent; }
+    .sidebar nav a:hover, .sidebar nav a.active { color:#fff; background: rgba(255,0,0,0.08); border-left-color:#f00; }
+
+    /* ---------- Menu Button & Overlay ---------- */
+    .menu-btn { position:fixed; top:20px; left:20px; width:50px; height:50px; background:#000; border:2px solid rgba(255,255,255,0.1); border-radius:8px; color:#fff; font-size:1.5em; cursor:pointer; z-index:999; }
+    .overlay { position:fixed; top:0; left:0; width:100%; height:100vh; background:rgba(0,0,0,0.8); opacity:0; visibility:hidden; transition:all .3s ease; z-index:998; }
+    .overlay.active { opacity:1; visibility:visible; }
+
+    /* ---------- Main ---------- */
+    .main-content { margin-left:0; min-height:100vh; display:flex; flex-direction:column; padding:20px; }
+    .page-header { font-size:3em; text-align:center; margin:20px 0; color:#fff; }
+    .container { width:94%; max-width:1200px; margin:0 auto; }
+
+    .page-title { font-size:2.2em; text-align:center; margin-bottom:6px; background:linear-gradient(90deg,#f00,#ff6b6b); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .subtitle { text-align:center; color:#999; margin-bottom:20px; }
+
+    /* ---------- Layout ---------- */
+    .grid { display:grid; grid-template-columns: 1fr 380px; gap:28px; align-items:start; }
+    @media (max-width:900px) { .grid { grid-template-columns: 1fr; } }
+
+    section { background: rgba(0,0,0,0.85); border:2px solid rgba(255,255,255,0.06); border-radius:14px; padding:18px; }
+
+    /* ---------- Calendar ---------- */
+    .calendar { padding:10px; border-radius:10px; }
+    .calendar-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; gap:10px; }
+    .calendar-header h3 { font-size:1.2em; color:#fff; }
+    .calendar-header button { background:none; border:2px solid rgba(255,255,255,0.06); color:#fff; padding:8px 10px; border-radius:8px; cursor:pointer; }
+    .calendar-header button:hover { border-color:#f00; color:#f00; }
+
+    .calendar-days { display:grid; grid-template-columns: repeat(7, 1fr); gap:8px; }
+    .calendar-days .weekday { text-align:center; font-weight:700; color:#f00; font-size:.85em; padding-bottom:6px; }
+
+    .calendar-day {
+      padding:12px;
+      min-height:56px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      background: rgba(255,255,255,0.02);
+      border-radius:8px;
+      cursor:pointer;
+      position:relative;
+      transition:all .15s ease;
+      user-select:none;
+    }
+    .calendar-day:hover { transform:translateY(-4px); box-shadow:0 10px 30px rgba(255,0,0,0.06); }
+    .calendar-day.past { opacity:0.35; cursor:not-allowed; transform:none; box-shadow:none; }
+    .calendar-day.today { box-shadow:0 0 30px rgba(255,0,0,0.25); background: rgba(255,0,0,0.06); }
+    .calendar-day.booked { background: rgba(255,0,0,0.14); border:1px solid rgba(255,0,0,0.18); color:#fff; }
+    .calendar-day.available { background: rgba(0,255,0,0.06); border:1px solid rgba(0,255,0,0.12); color:#fff; }
+    .calendar-day.selected { background:#f00; color:#fff; }
+
+    .day-number { font-weight:700; font-size:1.05em; }
+
+    .availability-badge { position:absolute; bottom:6px; left:6px; right:6px; font-size:.72em; padding:6px; border-radius:8px; background:rgba(0,0,0,0.45); text-align:center; color:#ddd; }
+
+    /* ---------- Right column (booking options) ---------- */
+    .booking-card { display:flex; flex-direction:column; gap:12px; }
+    .form-select, .form-input { width:100%; padding:12px; background:rgba(0,0,0,0.4); border:2px solid rgba(255,0,0,0.12); border-radius:10px; color:#fff; }
+    .form-select:focus, .form-input:focus { outline:none; border-color:#f00; box-shadow:0 0 10px rgba(255,0,0,0.12); }
+
+    .cta-button { display:inline-block; padding:12px 18px; border-radius:10px; border:2px solid #000; background:#000; color:#fff; cursor:pointer; text-align:center; }
+    .cta-button[disabled] { opacity:0.5; cursor:not-allowed; }
+
+    .price-tag { font-weight:700; font-size:1.2em; color:#ffd166; }
+
+    /* legend */
+    .legend { display:flex; gap:18px; justify-content:center; margin-top:18px; }
+    .legend-item { display:flex; gap:8px; align-items:center; font-size:.95em; color:#ddd; }
+    .legend-dot { width:14px; height:14px; border-radius:50%; }
+    .legend-dot.available { background:#0f0; box-shadow:0 0 8px rgba(0,255,0,0.15); }
+    .legend-dot.booked { background:#f00; box-shadow:0 0 8px rgba(255,0,0,0.15); }
+    .legend-dot.today { background:rgba(255,0,0,0.5); }
+
+    /* pricing table */
+    .pricing-table { width:100%; border-collapse:collapse; margin:12px 0 0 0; background:rgba(255,255,255,0.02); border-radius:8px; overflow:hidden; }
+    .pricing-table th, .pricing-table td { padding:10px 12px; text-align:center; border-bottom:1px solid rgba(255,255,255,0.04); font-size:0.95em; }
+    .pricing-table th { background: rgba(255,255,255,0.03); color:#ffd700; font-weight:700; }
+
+    .pricing-section { margin-top:18px; padding:14px; border-radius:10px; background: rgba(255,255,255,0.02); }
+    .pricing-subtitle { margin-top:8px; font-size:1.05em; color:#fff; text-transform:uppercase; }
+
+    /* modal */
+    .modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:2000; visibility:hidden; opacity:0; transition:all .18s ease; }
+    .modal-backdrop.show { visibility:visible; opacity:1; }
+    .modal { background:#0b0b0b; border:2px solid rgba(255,255,255,0.04); width:min(520px,92%); border-radius:12px; padding:16px; }
+    .modal h3 { margin-bottom:8px; color:#fff; }
+    .modal p { color:#ccc; margin-bottom:12px; }
+    .modal .small { font-size:.9em; color:#bbb; }
+
+    footer { margin-top:22px; text-align:center; color:#999; padding:10px; font-size:.9em; }
+  
