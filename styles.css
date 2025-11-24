@@ -6,6 +6,7 @@
 
 body {
   font-family: "Tektur", sans-serif;
+  font-size: 1em;
   background-color: #000;
   color: #fff;
   min-height: 100vh;
@@ -638,3 +639,4 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
