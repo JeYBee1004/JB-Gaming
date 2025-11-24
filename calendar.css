@@ -1,105 +1,139 @@
 
-    /* ---------- Reset & Base ---------- */
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family: "Tektur", sans-serif; background:#000; color:#fff; min-height:100vh; -webkit-font-smoothing:antialiased; }
-    a { color:inherit; }
-
-    /* ---------- Sidebar ---------- */
-    .sidebar { position:fixed; left:-300px; top:0; width:300px; height:100vh; background:#000; border-right:2px solid rgba(255,255,255,0.08); transition:left .3s ease; z-index:1000; overflow:auto; padding-bottom:60px; }
-    .sidebar.active { left:0; }
-    .sidebar-header { font-size:2em; padding:30px 20px; text-align:center; color:#fff; border-bottom:2px solid rgba(255,255,255,0.08); }
-    .close-btn { position:absolute; top:20px; right:20px; background:none; border:none; color:#fff; font-size:2em; cursor:pointer; }
-    .close-btn:hover { color:#f00; }
-    .sidebar nav { padding:20px 0; }
-    .sidebar nav a { display:block; padding:15px 30px; color:#ccc; text-decoration:none; border-left:3px solid transparent; }
-    .sidebar nav a:hover, .sidebar nav a.active { color:#fff; background: rgba(255,0,0,0.08); border-left-color:#f00; }
-
-    /* ---------- Menu Button & Overlay ---------- */
-    .menu-btn { position:fixed; top:20px; left:20px; width:50px; height:50px; background:#000; border:2px solid rgba(255,255,255,0.1); border-radius:8px; color:#fff; font-size:1.5em; cursor:pointer; z-index:999; }
-    .overlay { position:fixed; top:0; left:0; width:100%; height:100vh; background:rgba(0,0,0,0.8); opacity:0; visibility:hidden; transition:all .3s ease; z-index:998; }
-    .overlay.active { opacity:1; visibility:visible; }
-
-    /* ---------- Main ---------- */
-    .main-content { margin-left:0; min-height:100vh; display:flex; flex-direction:column; padding:20px; }
-    .page-header { font-size:3em; text-align:center; margin:20px 0; color:#fff; }
-    .container { width:94%; max-width:1200px; margin:0 auto; }
-
-    .page-title { font-size:2.2em; text-align:center; margin-bottom:6px; background:linear-gradient(90deg,#f00,#ff6b6b); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-    .subtitle { text-align:center; color:#999; margin-bottom:20px; }
-
-    /* ---------- Layout ---------- */
-    .grid { display:grid; grid-template-columns: 1fr 380px; gap:28px; align-items:start; }
-    @media (max-width:900px) { .grid { grid-template-columns: 1fr; } }
-
-    section { background: rgba(0,0,0,0.85); border:2px solid rgba(255,255,255,0.06); border-radius:14px; padding:18px; }
-
-    /* ---------- Calendar ---------- */
-    .calendar { padding:10px; border-radius:10px; }
-    .calendar-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; gap:10px; }
-    .calendar-header h3 { font-size:1.2em; color:#fff; }
-    .calendar-header button { background:none; border:2px solid rgba(255,255,255,0.06); color:#fff; padding:8px 10px; border-radius:8px; cursor:pointer; }
-    .calendar-header button:hover { border-color:#f00; color:#f00; }
-
-    .calendar-days { display:grid; grid-template-columns: repeat(7, 1fr); gap:8px; }
-    .calendar-days .weekday { text-align:center; font-weight:700; color:#f00; font-size:.85em; padding-bottom:6px; }
-
-    .calendar-day {
-      padding:12px;
-      min-height:56px;
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
-      background: rgba(255,255,255,0.02);
-      border-radius:8px;
-      cursor:pointer;
-      position:relative;
-      transition:all .15s ease;
-      user-select:none;
-    }
-    .calendar-day:hover { transform:translateY(-4px); box-shadow:0 10px 30px rgba(255,0,0,0.06); }
-    .calendar-day.past { opacity:0.35; cursor:not-allowed; transform:none; box-shadow:none; }
-    .calendar-day.today { box-shadow:0 0 30px rgba(255,0,0,0.25); background: rgba(255,0,0,0.06); }
-    .calendar-day.booked { background: rgba(255,0,0,0.14); border:1px solid rgba(255,0,0,0.18); color:#fff; }
-    .calendar-day.available { background: rgba(0,255,0,0.06); border:1px solid rgba(0,255,0,0.12); color:#fff; }
-    .calendar-day.selected { background:#f00; color:#fff; }
-
-    .day-number { font-weight:700; font-size:1.05em; }
-
-    .availability-badge { position:absolute; bottom:6px; left:6px; right:6px; font-size:.72em; padding:6px; border-radius:8px; background:rgba(0,0,0,0.45); text-align:center; color:#ddd; }
-
-    /* ---------- Right column (booking options) ---------- */
-    .booking-card { display:flex; flex-direction:column; gap:12px; }
-    .form-select, .form-input { width:100%; padding:12px; background:rgba(0,0,0,0.4); border:2px solid rgba(255,0,0,0.12); border-radius:10px; color:#fff; }
-    .form-select:focus, .form-input:focus { outline:none; border-color:#f00; box-shadow:0 0 10px rgba(255,0,0,0.12); }
-
-    .cta-button { display:inline-block; padding:12px 18px; border-radius:10px; border:2px solid #000; background:#000; color:#fff; cursor:pointer; text-align:center; }
-    .cta-button[disabled] { opacity:0.5; cursor:not-allowed; }
-
-    .price-tag { font-weight:700; font-size:1.2em; color:#ffd166; }
-
-    /* legend */
-    .legend { display:flex; gap:18px; justify-content:center; margin-top:18px; }
-    .legend-item { display:flex; gap:8px; align-items:center; font-size:.95em; color:#ddd; }
-    .legend-dot { width:14px; height:14px; border-radius:50%; }
-    .legend-dot.available { background:#0f0; box-shadow:0 0 8px rgba(0,255,0,0.15); }
-    .legend-dot.booked { background:#f00; box-shadow:0 0 8px rgba(255,0,0,0.15); }
-    .legend-dot.today { background:rgba(255,0,0,0.5); }
-
-    /* pricing table */
-    .pricing-table { width:100%; border-collapse:collapse; margin:12px 0 0 0; background:rgba(255,255,255,0.02); border-radius:8px; overflow:hidden; }
-    .pricing-table th, .pricing-table td { padding:10px 12px; text-align:center; border-bottom:1px solid rgba(255,255,255,0.04); font-size:0.95em; }
-    .pricing-table th { background: rgba(255,255,255,0.03); color:#ffd700; font-weight:700; }
-
-    .pricing-section { margin-top:18px; padding:14px; border-radius:10px; background: rgba(255,255,255,0.02); }
-    .pricing-subtitle { margin-top:8px; font-size:1.05em; color:#fff; text-transform:uppercase; }
-
-    /* modal */
-    .modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:2000; visibility:hidden; opacity:0; transition:all .18s ease; }
-    .modal-backdrop.show { visibility:visible; opacity:1; }
-    .modal { background:#0b0b0b; border:2px solid rgba(255,255,255,0.04); width:min(520px,92%); border-radius:12px; padding:16px; }
-    .modal h3 { margin-bottom:8px; color:#fff; }
-    .modal p { color:#ccc; margin-bottom:12px; }
-    .modal .small { font-size:.9em; color:#bbb; }
-
-    footer { margin-top:22px; text-align:center; color:#999; padding:10px; font-size:.9em; }
   
+  /* ---------- Reset & Base ---------- */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: "Tektur", sans-serif; background: #000; color: #fff; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar { position: fixed; left: -300px; top: 0; width: 300px; height: 100vh; background: #000; border-right: 2px solid rgba(255,255,255,0.08); transition: left .3s ease; z-index: 1000; overflow: auto; padding-bottom: 60px; }
+  .sidebar.active { left: 0; }
+  .sidebar-header { font-size: 1.8em; padding: 25px 20px; text-align: center; color: #fff; border-bottom: 2px solid rgba(255,255,255,0.08); }
+  .close-btn { position: absolute; top: 20px; right: 20px; background: none; border: none; color: #fff; font-size: 1.8em; cursor: pointer; }
+  .close-btn:hover { color: #f00; }
+  .sidebar nav { padding: 15px 0; }
+  .sidebar nav a { display: block; padding: 14px 25px; color: #ccc; text-decoration: none; border-left: 3px solid transparent; }
+  .sidebar nav a:hover, .sidebar nav a.active { color: #fff; background: rgba(255,0,0,0.08); border-left-color: #f00; }
+
+  /* ---------- Menu Button & Overlay ---------- */
+  .menu-btn { position: fixed; top: 15px; left: 15px; width: 48px; height: 48px; background: #000; border: 2px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 1.4em; cursor: pointer; z-index: 999; display: flex; align-items: center; justify-content: center; }
+  .menu-btn:active { transform: scale(0.95); }
+  .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.8); opacity: 0; visibility: hidden; transition: all .3s ease; z-index: 998; }
+  .overlay.active { opacity: 1; visibility: visible; }
+
+  /* ---------- Main - Mobile First ---------- */
+  .main-content { margin-left: 0; min-height: 100vh; display: flex; flex-direction: column; padding: 12px; }
+  .page-header { font-size: 1.6em; text-align: center; margin: 12px 0 16px; color: #fff; }
+  .container { width: 100%; max-width: 1200px; margin: 0 auto; }
+
+  .page-title { font-size: 1.5em; text-align: center; margin-bottom: 6px; background: linear-gradient(90deg,#f00,#ff6b6b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .subtitle { text-align: center; color: #999; margin-bottom: 18px; font-size: 0.9em; }
+
+  /* ---------- Layout Grid - Mobile First ---------- */
+  .grid { display: grid; grid-template-columns: 1fr; gap: 16px; align-items: start; }
+  
+  /* Tablet and above (768px+): switch to 2-column layout */
+  @media (min-width: 768px) { 
+    .grid { grid-template-columns: 1fr 380px; gap: 28px; } 
+  }
+
+  section { background: rgba(0,0,0,0.85); border: 2px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 16px; }
+  
+  /* Better padding for larger screens */
+  @media (min-width: 768px) {
+    section { padding: 20px; }
+  }
+
+  /* ---------- Calendar ---------- */
+  .calendar { padding: 8px; border-radius: 10px; }
+  .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 8px; }
+  .calendar-header h3 { font-size: 1em; color: #fff; flex: 1; min-width: 120px; text-align: center; }
+  .calendar-header button { background: none; border: 2px solid rgba(255,255,255,0.06); color: #fff; padding: 10px 12px; border-radius: 8px; cursor: pointer; font-size: 0.9em; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; }
+  .calendar-header button:hover { border-color: #f00; color: #f00; }
+  .calendar-header button:active { transform: scale(0.95); }
+
+  .calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+  .calendar-days .weekday { text-align: center; font-weight: 700; color: #f00; font-size: 0.75em; padding: 6px 2px; }
+
+  .calendar-day {
+    padding: 10px 4px;
+    min-height: 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.02);
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    transition: all .15s ease;
+    user-select: none;
+    aspect-ratio: 1;
+  }
+  .calendar-day:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(255,0,0,0.08); }
+  .calendar-day:active { transform: scale(0.96); }
+  .calendar-day.past { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
+  .calendar-day.today { box-shadow: 0 0 24px rgba(255,0,0,0.3); background: rgba(255,0,0,0.08); }
+  .calendar-day.booked { background: rgba(255,0,0,0.15); border: 1px solid rgba(255,0,0,0.2); }
+  .calendar-day.available { background: rgba(0,255,0,0.06); border: 1px solid rgba(0,255,0,0.12); }
+  .calendar-day.selected { background: #f00; color: #fff; box-shadow: 0 0 20px rgba(255,0,0,0.4); }
+
+  .day-number { font-weight: 700; font-size: 0.95em; margin-bottom: 2px; }
+
+  .availability-badge { font-size: 0.6em; padding: 3px 2px; border-radius: 4px; background: rgba(0,0,0,0.5); text-align: center; color: #ddd; line-height: 1.1; }
+
+  /* ---------- Right column (booking options) ---------- */
+  .booking-card { display: flex; flex-direction: column; gap: 14px; }
+  
+  .booking-card h2 { margin-bottom: 6px; font-size: 1.05em; }
+  
+  .form-select, .form-input { width: 100%; padding: 14px; background: rgba(0,0,0,0.4); border: 2px solid rgba(255,0,0,0.12); border-radius: 10px; color: #fff; font-size: 0.95em; min-height: 44px; }
+  .form-select:focus, .form-input:focus { outline: none; border-color: #f00; box-shadow: 0 0 10px rgba(255,0,0,0.15); }
+
+  .cta-button { display: block; padding: 14px 16px; border-radius: 10px; border: 2px solid #000; background: #000; color: #fff; cursor: pointer; text-align: center; font-size: 0.95em; font-weight: 600; transition: all 0.2s ease; width: 100%; min-height: 44px; }
+  .cta-button:hover { border-color: #f00; color: #f00; }
+  .cta-button:active { transform: scale(0.98); }
+  .cta-button[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+  .price-tag { font-weight: 700; font-size: 1.3em; color: #ffd166; margin-top: 4px; }
+
+  /* legend */
+  .legend { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+  .legend-item { display: flex; gap: 6px; align-items: center; font-size: 0.85em; color: #ddd; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .legend-dot.available { background: #0f0; box-shadow: 0 0 8px rgba(0,255,0,0.15); }
+  .legend-dot.booked { background: #f00; box-shadow: 0 0 8px rgba(255,0,0,0.15); }
+  .legend-dot.today { background: rgba(255,0,0,0.5); }
+
+  /* pricing table */
+  .pricing-table { width: 100%; border-collapse: collapse; margin: 12px 0 0; background: rgba(255,255,255,0.02); border-radius: 8px; overflow: hidden; font-size: 0.85em; }
+  .pricing-table th, .pricing-table td { padding: 10px 8px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .pricing-table th { background: rgba(255,255,255,0.03); color: #ffd700; font-weight: 700; }
+
+  .pricing-section { margin-top: 16px; padding: 16px; border-radius: 10px; background: rgba(255,255,255,0.02); }
+  .pricing-section h2 { margin-bottom: 10px; font-size: 1.05em; }
+  .pricing-subtitle { margin-top: 12px; margin-bottom: 10px; font-size: 0.9em; color: #fff; text-transform: uppercase; font-weight: 700; }
+
+  /* modal */
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 2000; visibility: hidden; opacity: 0; transition: all .18s ease; padding: 16px; }
+  .modal-backdrop.show { visibility: visible; opacity: 1; }
+  .modal { background: #0b0b0b; border: 2px solid rgba(255,255,255,0.04); width: min(520px, 95%); border-radius: 12px; padding: 18px; max-height: 85vh; overflow-y: auto; }
+  .modal h3 { margin-bottom: 12px; color: #fff; font-size: 1.05em; }
+  .modal p { color: #ccc; margin-bottom: 12px; line-height: 1.5; }
+  .modal .small { font-size: 0.85em; color: #bbb; }
+
+  footer { margin-top: 24px; text-align: center; color: #999; padding: 12px; font-size: 0.85em; }
+
+  /* ---------- Info box spacing ---------- */
+  #selected-info { background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; margin-bottom: 8px; line-height: 1.5; }
+  
+  .info-section { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.05); }
+  
+  .small { display: block; font-size: 0.8em; color: #aaa; margin-bottom: 6px; line-height: 1.4; }
+
+  /* Added price display wrapper for better mobile spacing */
+  .price-wrapper { display: flex; flex-direction: column; gap: 8px; }
+
+  /* Better button layout for mobile */
+  .button-group { display: flex; flex-direction: column; gap: 10px; }
+
