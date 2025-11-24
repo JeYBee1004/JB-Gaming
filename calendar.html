@@ -2,600 +2,187 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>❌⭕❌❌ Gaming — Calendar & Booking</title>
   <link href="https://fonts.googleapis.com/css2?family=Tektur&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link rel="stylesheet" href="calendar.css">
-  <style>
-    
-    /* ---------- Reset & Base ---------- */
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family: "Tektur", sans-serif; background:#000; color:#fff; min-height:100vh; -webkit-font-smoothing:antialiased; }
-    a { color:inherit; }
-
-    /* ---------- Sidebar ---------- */
-    .sidebar { position:fixed; left:-300px; top:0; width:300px; height:100vh; background:#000; border-right:2px solid rgba(255,255,255,0.08); transition:left .3s ease; z-index:1000; overflow:auto; padding-bottom:60px; }
-    .sidebar.active { left:0; }
-    .sidebar-header { font-size:2em; padding:30px 20px; text-align:center; color:#fff; border-bottom:2px solid rgba(255,255,255,0.08); }
-    .close-btn { position:absolute; top:20px; right:20px; background:none; border:none; color:#fff; font-size:2em; cursor:pointer; }
-    .close-btn:hover { color:#f00; }
-    .sidebar nav { padding:20px 0; }
-    .sidebar nav a { display:block; padding:15px 30px; color:#ccc; text-decoration:none; border-left:3px solid transparent; }
-    .sidebar nav a:hover, .sidebar nav a.active { color:#fff; background: rgba(255,0,0,0.08); border-left-color:#f00; }
-
-    /* ---------- Menu Button & Overlay ---------- */
-    .menu-btn { position:fixed; top:20px; left:20px; width:50px; height:50px; background:#000; border:2px solid rgba(255,255,255,0.1); border-radius:8px; color:#fff; font-size:1.5em; cursor:pointer; z-index:999; }
-    .overlay { position:fixed; top:0; left:0; width:100%; height:100vh; background:rgba(0,0,0,0.8); opacity:0; visibility:hidden; transition:all .3s ease; z-index:998; }
-    .overlay.active { opacity:1; visibility:visible; }
-
-    /* ---------- Main ---------- */
-    .main-content { margin-left:0; min-height:100vh; display:flex; flex-direction:column; padding:20px; }
-    .page-header { font-size:3em; text-align:center; margin:20px 0; color:#fff; }
-    .container { width:94%; max-width:1200px; margin:0 auto; }
-
-    .page-title { font-size:2.2em; text-align:center; margin-bottom:6px; background:linear-gradient(90deg,#f00,#ff6b6b); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-    .subtitle { text-align:center; color:#999; margin-bottom:20px; }
-
-    /* ---------- Layout ---------- */
-    .grid { display:grid; grid-template-columns: 1fr 380px; gap:28px; align-items:start; }
-    @media (max-width:900px) { .grid { grid-template-columns: 1fr; } }
-
-    section { background: rgba(0,0,0,0.85); border:2px solid rgba(255,255,255,0.06); border-radius:14px; padding:18px; }
-
-    /* ---------- Calendar ---------- */
-    .calendar { padding:10px; border-radius:10px; }
-    .calendar-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; gap:10px; }
-    .calendar-header h3 { font-size:1.2em; color:#fff; }
-    .calendar-header button { background:none; border:2px solid rgba(255,255,255,0.06); color:#fff; padding:8px 10px; border-radius:8px; cursor:pointer; }
-    .calendar-header button:hover { border-color:#f00; color:#f00; }
-
-    .calendar-days { display:grid; grid-template-columns: repeat(7, 1fr); gap:8px; }
-    .calendar-days .weekday { text-align:center; font-weight:700; color:#f00; font-size:.85em; padding-bottom:6px; }
-
-    .calendar-day {
-      padding:12px;
-      min-height:56px;
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
-      background: rgba(255,255,255,0.02);
-      border-radius:8px;
-      cursor:pointer;
-      position:relative;
-      transition:all .15s ease;
-      user-select:none;
-    }
-    .calendar-day:hover { transform:translateY(-4px); box-shadow:0 10px 30px rgba(255,0,0,0.06); }
-    .calendar-day.past { opacity:0.35; cursor:not-allowed; transform:none; box-shadow:none; }
-    .calendar-day.today { box-shadow:0 0 30px rgba(255,0,0,0.25); background: rgba(255,0,0,0.06); }
-    .calendar-day.booked { background: rgba(255,0,0,0.14); border:1px solid rgba(255,0,0,0.18); color:#fff; }
-    .calendar-day.available { background: rgba(0,255,0,0.06); border:1px solid rgba(0,255,0,0.12); color:#fff; }
-    .calendar-day.selected { background:#f00; color:#fff; }
-
-    .day-number { font-weight:700; font-size:1.05em; }
-
-    .availability-badge { position:absolute; bottom:6px; left:6px; right:6px; font-size:.72em; padding:6px; border-radius:8px; background:rgba(0,0,0,0.45); text-align:center; color:#ddd; }
-
-    /* ---------- Right column (booking options) ---------- */
-    .booking-card { display:flex; flex-direction:column; gap:12px; }
-    .form-select, .form-input { width:100%; padding:12px; background:rgba(0,0,0,0.4); border:2px solid rgba(255,0,0,0.12); border-radius:10px; color:#fff; }
-    .form-select:focus, .form-input:focus { outline:none; border-color:#f00; box-shadow:0 0 10px rgba(255,0,0,0.12); }
-
-    .cta-button { display:inline-block; padding:12px 18px; border-radius:10px; border:2px solid #000; background:#000; color:#fff; cursor:pointer; text-align:center; }
-    .cta-button[disabled] { opacity:0.5; cursor:not-allowed; }
-
-    .price-tag { font-weight:700; font-size:1.2em; color:#ffd166; }
-
-    /* legend */
-    .legend { display:flex; gap:18px; justify-content:center; margin-top:18px; }
-    .legend-item { display:flex; gap:8px; align-items:center; font-size:.95em; color:#ddd; }
-    .legend-dot { width:14px; height:14px; border-radius:50%; }
-    .legend-dot.available { background:#0f0; box-shadow:0 0 8px rgba(0,255,0,0.15); }
-    .legend-dot.booked { background:#f00; box-shadow:0 0 8px rgba(255,0,0,0.15); }
-    .legend-dot.today { background:rgba(255,0,0,0.5); }
-
-    /* pricing table */
-    .pricing-table { width:100%; border-collapse:collapse; margin:12px 0 0 0; background:rgba(255,255,255,0.02); border-radius:8px; overflow:hidden; }
-    .pricing-table th, .pricing-table td { padding:10px 12px; text-align:center; border-bottom:1px solid rgba(255,255,255,0.04); font-size:0.95em; }
-    .pricing-table th { background: rgba(255,255,255,0.03); color:#ffd700; font-weight:700; }
-
-    .pricing-section { margin-top:18px; padding:14px; border-radius:10px; background: rgba(255,255,255,0.02); }
-    .pricing-subtitle { margin-top:8px; font-size:1.05em; color:#fff; text-transform:uppercase; }
-
-    /* modal */
-    .modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:2000; visibility:hidden; opacity:0; transition:all .18s ease; }
-    .modal-backdrop.show { visibility:visible; opacity:1; }
-    .modal { background:#0b0b0b; border:2px solid rgba(255,255,255,0.04); width:min(520px,92%); border-radius:12px; padding:16px; }
-    .modal h3 { margin-bottom:8px; color:#fff; }
-    .modal p { color:#ccc; margin-bottom:12px; }
-    .modal .small { font-size:.9em; color:#bbb; }
-
-    footer { margin-top:22px; text-align:center; color:#999; padding:10px; font-size:.9em; }
-  
-  </style>
+  <link rel="stylesheet" href="calendar.css" />
 </head>
 <body>
+
 <div id="sidebar" class="sidebar">
-        <button class="close-btn" onclick="toggleSidebar()">&times;</button>
-        <header class="sidebar-header">❌⭕❌❌</header>
-        <nav>
-            <a href="index.html" class="active">Home</a>
-            <a href="pricing.html">Pricing</a>
-            <a href="calendar.html">Calendar</a>
-            <a href="about.html">About</a>
-            <a href="contact.html">Contact</a>
-        </nav>
+  <button class="close-btn" onclick="toggleSidebar()">&times;</button>
+  <header class="sidebar-header">❌⭕❌❌</header>
+  <nav>
+    <a href="index.html" class="active">Home</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="calendar.html">Calendar</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</div>
+
+<button class="menu-btn" onclick="toggleSidebar()">
+  <i class="fas fa-bars"></i>
+</button>
+
+<div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
+
+<main class="main-content" id="home">
+  <header class="page-header">❌⭕❌❌ Gaming</header>
+
+  <div class="container">
+
+    <h1 class="page-title">Console Rentals</h1>
+    <p class="subtitle">PSVITA & Nintendo DS Lite</p>
+
+    <div class="grid">
+
+      <!-- LEFT: Calendar + Pricing -->
+      <div>
+        <!-- Calendar Section -->
+        <section id="calendar">
+          <div class="calendar">
+            <div class="calendar-header">
+              <button id="prev-month" title="Previous month"><i class="fas fa-chevron-left"></i></button>
+              <h3 id="month-year">Month Year</h3>
+              <button id="next-month" title="Next month"><i class="fas fa-chevron-right"></i></button>
+            </div>
+
+            <div class="calendar-days" id="calendar-days"></div>
+
+            <div class="legend" aria-hidden="true">
+              <div class="legend-item"><div class="legend-dot available"></div><span>Available</span></div>
+              <div class="legend-item"><div class="legend-dot booked"></div><span>Booked</span></div>
+              <div class="legend-item"><div class="legend-dot today"></div><span>Today</span></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="pricing-section">
+          <h2>Rental Rates (Per Console)</h2>
+
+          <h3 class="pricing-subtitle">Daily / Short Rates</h3>
+          <table class="pricing-table">
+            <tr>
+              <th>Console</th>
+              <th>4 Hours</th>
+              <th>8 Hours</th>
+              <th>24 Hours</th>
+            </tr>
+            <tr>
+              <td>PSVITA</td>
+              <td>Ksh 300</td>
+              <td>Ksh 500</td>
+              <td>Ksh 800</td>
+            </tr>
+            <tr>
+              <td>NINTENDO DS Lite</td>
+              <td>Ksh 200</td>
+              <td>Ksh 350</td>
+              <td>Ksh 600</td>
+            </tr>
+          </table>
+
+          <h3 class="pricing-subtitle">Weekly & Weekend Packages</h3>
+          <table class="pricing-table">
+            <tr>
+              <th>Package</th>
+              <th>PSVITA</th>
+              <th>DS Lite</th>
+            </tr>
+            <tr>
+              <td>Weekend (Fri–Sun)</td>
+              <td>Ksh 1,500</td>
+              <td>Ksh 1,000</td>
+            </tr>
+            <tr>
+              <td>Weekly (7 Days)</td>
+              <td>Ksh 4,000</td>
+              <td>Ksh 3,000</td>
+            </tr>
+          </table>
+
+          <h3 class="pricing-subtitle">Available Time Options</h3>
+          <p style="color: #ccc; margin-top: 10px; line-height: 1.6;">2 Hours, 4 Hours, 8 Hours, 24 Hours, Weekend Package, Weekly Rental</p>
+          <p style="color: #aaa; font-size: 0.85em; margin-top: 10px;">Note: Weekend & Weekly packages cover the whole package duration</p>
+        </section>
+      </div>
+
+      <!-- RIGHT: Booking Card -->
+      <aside>
+        <section class="booking-card" id="booking">
+          <h2>Selected</h2>
+          <div id="selected-info"><p class="small">No date selected</p></div>
+
+          <div>
+            <label for="console-select" class="small">Choose console</label>
+            <select id="console-select" class="form-select" aria-label="Console select">
+              <option value="">-- choose console --</option>
+              <option value="PSVITA">PSVITA</option>
+              <option value="Nintendo DS Lite">Nintendo DS Lite</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="time-select" class="small">Choose time / package</label>
+            <select id="time-select" class="form-select" aria-label="Time slot">
+              <option value="">-- choose time slot / package --</option>
+              <option value="2 Hours">2 Hours</option>
+              <option value="4 Hours">4 Hours</option>
+              <option value="8 Hours">8 Hours</option>
+              <option value="24 Hours">24 Hours (Full day)</option>
+              <option value="Weekend">Weekend Package (Fri–Sun)</option>
+              <option value="Weekly">Weekly Package (7 days)</option>
+            </select>
+          </div>
+
+          <div class="price-wrapper">
+            <div>
+              <div class="small">Price</div>
+              <div id="price-display" class="price-tag">KSh —</div>
+            </div>
+
+            <button id="book-now-btn" class="cta-button" disabled>Book Now (WhatsApp)</button>
+          </div>
+
+          <div class="info-section">
+            <div class="small">Payment: Pochi La Biashara</div>
+            <div class="small">After payment, owner updates calendar to mark dates as booked.</div>
+          </div>
+
+          <div class="info-section">
+            <button id="admin-mark-booked" class="cta-button" style="background: #111; border: 2px solid #330000; color: #fff;">(Admin) Mark selected console as booked (local only)</button>
+          </div>
+        </section>
+      </aside>
+
     </div>
 
-    <button class="menu-btn" onclick="toggleSidebar()">
-        <i class="fas fa-bars"></i>
-    </button>
+    <footer>
+      <p>&copy; 2025 All Rights Reserved</p>
+    </footer>
+  </div>
+</main>
 
-    <div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
-
-  <main class="main-content" id="home">
-    <header class="page-header">❌⭕❌❌ Gaming</header>
-
-    <div class="container">
-
-      <h1 class="page-title">Console Rentals</h1>
-      <p class="subtitle">PSVITA & Nintendo DS Lite </p>
-
-      <div class="grid">
-
-        <!-- LEFT: Calendar + Pricing -->
-        <div>
-          <!-- Calendar Section -->
-          <section id="calendar">
-            <div class="calendar">
-              <div class="calendar-header">
-                <button id="prev-month" title="Previous month"><i class="fas fa-chevron-left"></i></button>
-                <h3 id="month-year">Month Year</h3>
-                <button id="next-month" title="Next month"><i class="fas fa-chevron-right"></i></button>
-              </div>
-
-              <div class="calendar-days" id="calendar-days"></div>
-
-              <div class="legend" aria-hidden="true">
-                <div class="legend-item"><div class="legend-dot available"></div>Available</div>
-                <div class="legend-item"><div class="legend-dot booked"></div>Booked</div>
-                <div class="legend-item"><div class="legend-dot today"></div>Today</div>
-              </div>
-            </div>
-          </section>
-
-          <!-- Pricing Section -->
-          <section id="pricing" class="pricing-section">
-            <h2 style="margin-bottom:8px;">Rental Rates (Per Console)</h2>
-
-            <h3 class="pricing-subtitle">Daily / Short Rates</h3>
-            <table class="pricing-table">
-              <tr>
-                <th>Console</th>
-                <th>4 Hours</th>
-                <th>8 Hours</th>
-                <th>24 Hours</th>
-              </tr>
-              <tr>
-                <td>PSVITA</td>
-                <td>Ksh 300</td>
-                <td>Ksh 500</td>
-                <td>Ksh 800</td>
-              </tr>
-              <tr>
-                <td>NINTENDO DS Lite</td>
-                <td>Ksh 200</td>
-                <td>Ksh 350</td>
-                <td>Ksh 600</td>
-              </tr>
-            </table>
-
-            <h3 class="pricing-subtitle">Weekly & Weekend Packages</h3>
-            <table class="pricing-table" style="margin-top:10px;">
-              <tr>
-                <th>Package</th>
-                <th>PSVITA</th>
-                <th>DS Lite</th>
-              </tr>
-              <tr>
-                <td>Weekend (Fri–Sun)</td>
-                <td>Ksh 1,500</td>
-                <td>Ksh 1,000</td>
-              </tr>
-              <tr>
-                <td>Weekly (7 Days)</td>
-                <td>Ksh 4,000</td>
-                <td>Ksh 3,000</td>
-              </tr>
-            </table>
-
-            <h3 class="pricing-subtitle">Available Time Options</h3>
-            <p style="color:#ccc; margin-top:8px;">2 Hours, 4 Hours, 8 Hours, 24 Hours, Weekend Package, Weekly Rental</p>
-            <p style="color:#bbb; font-size:.9em; margin-top:8px;">Note: Weekend & Weekly packages cover the whole package duration</p>
-          </section>
-        </div>
-
-        <!-- RIGHT: Booking Card -->
-        <aside>
-          <section class="booking-card" id="booking">
-            <h2 style="margin-bottom:6px;">Selected</h2>
-            <div id="selected-info"><p class="small">No date selected</p></div>
-
-            <div>
-              <label for="console-select" class="small">Choose console</label>
-              <select id="console-select" class="form-select" aria-label="Console select">
-                <option value="">-- choose console --</option>
-                <option value="PSVITA">PSVITA</option>
-                <option value="Nintendo DS Lite">Nintendo DS Lite</option>
-              </select>
-            </div>
-
-            <div>
-              <label for="time-select" class="small">Choose time / package</label>
-              <select id="time-select" class="form-select" aria-label="Time slot">
-                <option value="">-- choose time slot / package --</option>
-                <option value="2 Hours">2 Hours</option>
-                <option value="4 Hours">4 Hours</option>
-                <option value="8 Hours">8 Hours</option>
-                <option value="24 Hours">24 Hours (Full day)</option>
-                <option value="Weekend">Weekend Package (Fri–Sun)</option>
-                <option value="Weekly">Weekly Package (7 days)</option>
-              </select>
-            </div>
-
-            <div style="display:flex; gap:12px; align-items:center; margin-top:6px;">
-              <div>
-                <div class="small">Price</div>
-                <div id="price-display" class="price-tag">KSh —</div>
-              </div>
-
-              <div style="margin-left:auto;">
-                <button id="book-now-btn" class="cta-button" disabled>Book Now (WhatsApp)</button>
-              </div>
-            </div>
-
-            <div style="margin-top:8px;">
-              <div class="small">Payment: Pochi La Biashara</div>
-              <div class="small">After payment, owner updates calendar to mark dates as booked.</div>
-            </div>
-
-            <div style="margin-top:12px;">
-              <button id="admin-mark-booked" class="cta-button" style="background:#111;border:2px solid #330000;color:#fff;">(Admin) Mark selected console as booked (local only)</button>
-            </div>
-          </section>
-        </aside>
-
-      </div>
-
-      <footer>
-            <p>&copy; 2025 All Rights Reserved</p>
-        </footer>
+<!-- Confirmation / WhatsApp Modal -->
+<div id="modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal" role="document">
+    <h3>Ready to book?</h3>
+    <div id="modal-body">
+      <p class="small">We'll open WhatsApp with a pre-filled message. Please provide your name & pickup/delivery location in the chat.</p>
+      <div id="confirm-summary"></div>
     </div>
-  </main>
 
-  <!-- Confirmation / WhatsApp Modal -->
-  <div id="modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="modal" role="document">
-      <h3>Ready to book?</h3>
-      <div id="modal-body">
-        <p class="small">We'll open WhatsApp with a pre-filled message. Please provide your name & pickup/delivery location in the chat.</p>
-        <div id="confirm-summary"></div>
-      </div>
-
-      <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:12px;">
-        <button id="modal-cancel" class="cta-button" style="background:#111;color:#fff;">Cancel</button>
-        <button id="modal-confirm" class="cta-button">Open WhatsApp</button>
-      </div>
+    <div class="button-group" style="margin-top: 16px;">
+      <button id="modal-cancel" class="cta-button" style="background: #111; color: #fff;">Cancel</button>
+      <button id="modal-confirm" class="cta-button">Open WhatsApp</button>
     </div>
   </div>
+</div>
 
-  <script src="calendar.js">
-    (function() {
-// ---------- Config ----------
-const PHONE = '+254710709997'; // <- REPLACE with your Kenya WhatsApp number (e.g. 254712345678)
-const POCHI_NOTE = 'Pochi La Biashara: +254710709997'; // replace with your Pochi number/instructions
+<script src="calendar.js"></script>
 
-// Pricing table matching your strategy
-const SHORT_PRICES = {
-    "PSVITA": {
-    "2 Hours": 200,   // optional extra small slot
-    "4 Hours": 300,
-    "8 Hours": 500,
-    "24 Hours": 800
-    },
-    "Nintendo DS Lite": {
-    "2 Hours": 150,
-    "4 Hours": 200,
-    "8 Hours": 350,
-    "24 Hours": 600
-    }
-};
-
-const PACKAGE_PRICES = {
-    "Weekend": { "PSVITA": 1500, "Nintendo DS Lite": 1000 },
-    "Weekly": { "PSVITA": 4000, "Nintendo DS Lite": 3000 }
-};
-
-// ---------- State ----------
-let bookings = {}; // from bookings.json
-let visibleYear, visibleMonth;
-let selectedDate = null;
-let selectedConsole = '';
-let selectedTime = '';
-
-// ---------- DOM ----------
-const monthYearEl = document.getElementById('month-year');
-const daysContainer = document.getElementById('calendar-days');
-const prevBtn = document.getElementById('prev-month');
-const nextBtn = document.getElementById('next-month');
-const selectedInfo = document.getElementById('selected-info');
-const consoleSelect = document.getElementById('console-select');
-const timeSelect = document.getElementById('time-select');
-const priceDisplay = document.getElementById('price-display');
-const bookNowBtn = document.getElementById('book-now-btn');
-const adminMarkBookedBtn = document.getElementById('admin-mark-booked');
-
-const modal = document.getElementById('modal');
-const modalConfirm = document.getElementById('modal-confirm');
-const modalCancel = document.getElementById('modal-cancel');
-const confirmSummary = document.getElementById('confirm-summary');
-
-// ---------- Utilities ----------
-function toISO(d) {
-    const y = d.getFullYear();
-    const m = String(d.getMonth()+1).padStart(2,'0');
-    const day = String(d.getDate()).padStart(2,'0');
-    return `${y}-${m}-${day}`;
-}
-
-function isSameDay(a,b){
-    return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
-}
-
-// ---------- Load bookings.json ----------
-async function loadBookings(){
-    try {
-    const res = await fetch('bookings.json', { cache: 'no-store' });
-    if (!res.ok) throw new Error('no bookings.json found');
-    bookings = await res.json();
-    } catch (err) {
-    console.warn('Failed to load bookings.json — using fallback sample. Error:', err.message);
-    bookings = {
-        "2025-12-05": ["PSVITA"],
-        "2025-12-07": ["Nintendo DS Lite"],
-        "2025-12-08": ["PSVITA","Nintendo DS Lite"]
-    };
-    }
-}
-
-// ---------- Render calendar ----------
-function renderCalendar(year, month){
-    visibleYear = year; visibleMonth = month;
-    const today = new Date(); today.setHours(0,0,0,0);
-    const first = new Date(year, month, 1);
-    const last = new Date(year, month+1, 0);
-
-    monthYearEl.textContent = first.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-
-    let html = '';
-    const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-    dayNames.forEach(n => html += `<div class="weekday">${n}</div>`);
-
-    const leading = first.getDay();
-    for (let i=0;i<leading;i++) html += `<div></div>`;
-
-    for (let d = 1; d<= last.getDate(); d++){
-    const dt = new Date(year, month, d);
-    const iso = toISO(dt);
-    const isToday = isSameDay(dt, new Date());
-    const isPast = dt < today && !isToday;
-
-    const bookedConsoles = Array.isArray(bookings[iso]) ? bookings[iso] : [];
-    const isFullyBooked = bookedConsoles.length >= 2; // two consoles total
-
-    const classes = ['calendar-day'];
-    if (isToday) classes.push('today');
-    if (isPast) classes.push('past');
-    if (isFullyBooked) classes.push('booked');
-    if (!isPast && !isFullyBooked) classes.push('available');
-
-    let badge = '';
-    if (isPast) badge = 'Past';
-    else {
-        const free = Object.keys(SHORT_PRICES).filter(c => !bookedConsoles.includes(c));
-        badge = free.length === 0 ? 'All booked' : `${free.length} available`;
-    }
-
-    const attrs = `data-iso="${iso}" data-year="${year}" data-month="${month}" data-day="${d}"`;
-    const disabled = isPast ? 'aria-disabled="true"' : '';
-    html += `<div class="${classes.join(' ')}" ${attrs} ${disabled} onclick="onCalendarDayClick(event)"><div class="day-number">${d}</div><div class="availability-badge">${badge}</div></div>`;
-    }
-
-    daysContainer.innerHTML = html;
-}
-
-// ---------- Day click ----------
-window.onCalendarDayClick = function(event){
-    const target = event.currentTarget || event.target.closest('.calendar-day');
-    if (!target) return;
-    if (target.classList.contains('past')) return;
-
-    const year = parseInt(target.getAttribute('data-year'));
-    const month = parseInt(target.getAttribute('data-month'));
-    const day = parseInt(target.getAttribute('data-day'));
-
-    selectedDate = new Date(year, month, day);
-
-    document.querySelectorAll('.calendar-day').forEach(el => el.classList.remove('selected'));
-    target.classList.add('selected');
-
-    updateSelectedInfo();
-    updateAvailabilityForSelectedDate();
-    checkBookButtonState();
-};
-
-function updateSelectedInfo(){
-    if (!selectedDate) { selectedInfo.innerHTML = '<p class="small">No date selected</p>'; return; }
-    selectedInfo.innerHTML = `<div class="small">Date</div><div style="font-weight:700; margin-bottom:4px">${selectedDate.toDateString()}</div><div class="small">Choose console & time/package</div>`;
-}
-
-function updateAvailabilityForSelectedDate(){
-    if (!selectedDate) return;
-    const iso = toISO(selectedDate);
-    const booked = Array.isArray(bookings[iso]) ? bookings[iso] : [];
-
-    Array.from(consoleSelect.options).forEach(opt => {
-    if (!opt.value) return;
-    if (booked.includes(opt.value)){
-        opt.disabled = true;
-        opt.text = `${opt.value} — BOOKED`;
-    } else {
-        opt.disabled = false;
-        opt.text = opt.value;
-    }
-    });
-
-    if (selectedConsole && booked.includes(selectedConsole)) {
-    selectedConsole = '';
-    consoleSelect.value = '';
-    }
-    computePriceDisplay();
-}
-
-// ---------- Pricing logic ----------
-function computePriceDisplay(){
-    if (!selectedDate || !selectedConsole || !selectedTime) {
-    priceDisplay.textContent = 'KSh —';
-    return;
-    }
-
-    // Short durations
-    if (SHORT_PRICES[selectedConsole] && SHORT_PRICES[selectedConsole][selectedTime] !== undefined) {
-    const p = SHORT_PRICES[selectedConsole][selectedTime];
-    priceDisplay.textContent = `KSh ${p.toLocaleString()}`;
-    return;
-    }
-
-    // Packages
-    if (selectedTime === 'Weekend' || selectedTime === 'Weekly') {
-    const p = PACKAGE_PRICES[selectedTime][selectedConsole];
-    priceDisplay.textContent = `KSh ${p.toLocaleString()}`;
-    return;
-    }
-
-    // default fallback
-    priceDisplay.textContent = 'KSh —';
-}
-
-function checkBookButtonState(){
-    if (selectedDate && selectedConsole && selectedTime) bookNowBtn.disabled = false;
-    else bookNowBtn.disabled = true;
-    computePriceDisplay();
-}
-
-// ---------- WhatsApp booking ----------
-function buildWhatsAppMessage(){
-    const iso = toISO(selectedDate);
-    const readable = selectedDate.toDateString();
-    const price = priceDisplay.textContent;
-    // include note for weekend/weekly package selection
-    let extra = '';
-    if (selectedTime === 'Weekend') extra = '%0A(Note: Weekend package covers Fri–Sun)';
-    if (selectedTime === 'Weekly') extra = '%0A(Note: Weekly package covers 7 days)';
-    const msg = `Hello! I would like to book:%0A%0AConsole: ${selectedConsole}%0ADate: ${readable} (${iso})%0ATime/Package: ${selectedTime}%0APrice: ${price}%0ADuration: ${selectedTime}%0AName: %0ALocation: %0A${POCHI_NOTE}${extra}%0A%0APlease confirm availability.`;
-    return msg;
-}
-
-function openWhatsApp(){
-    const msg = buildWhatsAppMessage();
-    const url = `https://wa.me/${PHONE}?text=${msg}`;
-    window.open(url, '_blank');
-}
-
-// ---------- Admin helper: mark selected booked locally ----------
-function adminMarkSelectedAsBookedLocal(){
-    if (!selectedDate || !selectedConsole) { alert('Select date and console first.'); return; }
-    const iso = toISO(selectedDate);
-    if (!bookings[iso]) bookings[iso] = [];
-    if (!bookings[iso].includes(selectedConsole)) bookings[iso].push(selectedConsole);
-    renderCalendar(visibleYear, visibleMonth);
-    updateAvailabilityForSelectedDate();
-    alert(`(Local) Marked ${selectedConsole} as booked on ${iso}. Update bookings.json on the server to persist.`);
-}
-
-// ---------- Modal UI ----------
-function showModal(){
-    const iso = toISO(selectedDate);
-    confirmSummary.innerHTML = `
-    <div><strong>Console:</strong> ${selectedConsole}</div>
-    <div><strong>Date:</strong> ${selectedDate.toDateString()} (${iso})</div>
-    <div><strong>Time/Package:</strong> ${selectedTime}</div>
-    <div><strong>Price:</strong> ${priceDisplay.textContent}</div>
-    <div style="margin-top:8px;"><strong>Payment:</strong> ${POCHI_NOTE}</div>
-    <div class="small" style="margin-top:8px;">After you pay via Pochi, the owner will confirm and update the calendar (server-side bookings.json).</div>
-    `;
-    modal.classList.add('show'); modal.setAttribute('aria-hidden','false');
-}
-function hideModal(){ modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); }
-
-// ---------- Init ----------
-async function init(){
-    const now = new Date(); visibleYear = now.getFullYear(); visibleMonth = now.getMonth();
-
-    prevBtn.addEventListener('click', () => { const p = new Date(visibleYear, visibleMonth-1,1); renderCalendar(p.getFullYear(), p.getMonth()); });
-    nextBtn.addEventListener('click', () => { const n = new Date(visibleYear, visibleMonth+1,1); renderCalendar(n.getFullYear(), n.getMonth()); });
-
-    consoleSelect.addEventListener('change', (e) => {
-    selectedConsole = e.target.value;
-    const opt = e.target.selectedOptions[0];
-    if (opt && opt.disabled) { selectedConsole=''; e.target.value=''; alert('That console is already booked for this date. Choose another date or console.'); }
-    checkBookButtonState();
-    });
-
-    timeSelect.addEventListener('change', (e) => { selectedTime = e.target.value; checkBookButtonState(); });
-
-    bookNowBtn.addEventListener('click', () => { showModal(); });
-
-    modalCancel.addEventListener('click', hideModal);
-    modalConfirm.addEventListener('click', () => {
-    hideModal();
-    openWhatsApp();
-    const pending = { date: toISO(selectedDate), console: selectedConsole, time: selectedTime, price: priceDisplay.textContent, createdAt: new Date().toISOString() };
-    const pendings = JSON.parse(localStorage.getItem('pendingBookings') || '[]'); pendings.push(pending); localStorage.setItem('pendingBookings', JSON.stringify(pendings));
-    });
-
-    adminMarkBookedBtn.addEventListener('click', adminMarkSelectedAsBookedLocal);
-
-    await loadBookings();
-    renderCalendar(visibleYear, visibleMonth);
-
-    // keyboard accessibility
-    document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        if (modal.classList.contains('show')) hideModal();
-        if (document.getElementById('sidebar').classList.contains('active')) toggleSidebar();
-    }
-    });
-}
-
-init();
-
-// expose toggleSidebar
-window.toggleSidebar = function(){
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
-    sidebar.classList.toggle('active');
-    overlay.classList.toggle('active');
-    document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : 'auto';
-};
-
-// debugging helpers
-window._BOOKINGS = bookings;
-window._RELOAD_BOOKINGS = async function(){ await loadBookings(); renderCalendar(visibleYear, visibleMonth); };
-
-})();
-
-  </script>
 </body>
 </html>
